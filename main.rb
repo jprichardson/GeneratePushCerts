@@ -1,13 +1,21 @@
 require 'watir-webdriver'
+#require 'watir-webdriver/extensions/wait'
 require 'yaml'
 
 config = YAML::load(File.open(Dir.pwd + '/config.yml'))
 
 USER = config['user']
 PASSWORD = config['password']
+COMPANY = config['company']
+
+RSA_FILE = '/tmp/push_notification.key'
+CERT_REQUEST_FILE = '/tmp/CertificateSigningRequest.certSigningRequest'
 
 def main
-  puts("Let's get this party started.'")
+  puts("Let's get this party started.")
+
+  generate_cert_request
+
   browser = Watir::Browser.new(:chrome)
 
   browser.goto("https://developer.apple.com/ios/manage/bundles/index.action")
@@ -35,7 +43,9 @@ def main
             puts "#{aaid} already enabled. Skipping..."
           elsif tds[1].text.include?('Configurable for Production')
             puts "Configuring certificate for #{aaid}..."
-            
+            tds[4].a.click #'Configure' link
+            configure_cert(browser) #new configure page
+            STDIN.gets
           end
         end
       end
@@ -49,7 +59,27 @@ def main
 end
 
 def configure_cert(browser)
-  
+  browser.checkbox(id: 'enablePush').click() #enable configure buttons
+  browser.button(id: 'aps-assistant-btn-prod-en').click() #configure button
+  Watir::Wait.until { browser.body.text.include?('Generate a Certificate Signing Request') }
+
+  browser.button(id: 'ext-gen59').click() #on lightbox overlay, click continue
+  browser.file_field(name: 'upload').set(CERT_REQUEST_FILE)
+  browser.file_field(name: 'upload').click() #calls some local javascript to validate the file and enable continue button
+  #browser.form(name: 'certsubmit').submit()
+  browser.button(id: 'ext-gen75').click()
+
+end
+
+def generate_rsa_key
+  puts 'Generating RSA key...'
+  `openssl genrsa -out #{RSA_FILE} 2048`
+end
+
+def generate_cert_request
+  generate_rsa_key
+  puts 'Generating Certificate Request...'
+  `openssl req -new -key #{RSA_FILE} -out #{CERT_REQUEST_FILE}  -subj "/#{USER}, CN=#{COMPANY}, C=US"`
 end
 
 class String

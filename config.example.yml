@@ -1,3 +1,4 @@
 ---
   user: someuser@somedomain.com
   password: secretpassword
+  company: somecompany
