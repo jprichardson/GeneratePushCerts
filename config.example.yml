@@ -4,3 +4,4 @@
   company: somecompany
   keychain: Push_Notifcations
   download_dir: /Users/jprichardson/Downloads/
+  cert_dir: /Users/jprichardson/Desktop/PushCerts/

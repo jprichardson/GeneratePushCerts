@@ -9,6 +9,7 @@ PASSWORD = config['password']
 COMPANY = config['company']
 KEYCHAIN = config['keychain']
 DOWNLOAD_DIR = config['download_dir']
+CERT_DIR = config['cert_dir']
 
 #create keychain
 kcf = ''
@@ -31,7 +32,7 @@ else
   end
 end
 
-
+APP_IDS_URL = "https://developer.apple.com/ios/manage/bundles/index.action"
 RSA_FILE = '/tmp/push_notification.key'
 CERT_REQUEST_FILE = '/tmp/CertificateSigningRequest.certSigningRequest'
 KEYCHAIN_FILE = kcf
@@ -46,7 +47,7 @@ def main
 
   browser = Watir::Browser.new(:chrome)
 
-  browser.goto("https://developer.apple.com/ios/manage/bundles/index.action")
+  browser.goto(APP_IDS_URL)
   table = nil
 
   if browser.body.text.include?('Sign in')
@@ -93,16 +94,20 @@ def configure_cert(browser, app)
   Watir::Wait.until { browser.body.text.include?('Generate a Certificate Signing Request') }
 
   browser.button(id: 'ext-gen59').click() #on lightbox overlay, click continue
+
+  Watir::Wait.until { browser.body.text.include?('Submit Certificate Signing Request') }
+
   browser.file_field(name: 'upload').set(CERT_REQUEST_FILE)
-  browser.file_field(name: 'upload').click() #calls some local javascript to validate the file and enable continue button
-  #browser.form(name: 'certsubmit').submit()
+  browser.execute_script("callFileValidate();")
+  #browser.file_field(name: 'upload').click() #calls some local javascript to validate the file and enable continue button, unfortunately File Browse dialog shows up
+
   browser.button(id: 'ext-gen75').click()
 
   Watir::Wait.until { browser.body.text.include?('Your APNs SSL Certificate has been generated.') }
 
   browser.button(id: 'ext-gen59').click() #continue
 
-  Watir::Wait.until {browser.body.text.include?('Step 1: Download') }
+  Watir::Wait.until { browser.body.text.include?('Step 1: Download') }
 
   File.rm(DOWNLOADED_CERT_FILE) if File.exists?(DOWNLOADED_CERT_FILE)
 
@@ -120,16 +125,20 @@ def configure_cert(browser, app)
   export_identity(app)
   convert_p12_to_pem(app)
 
+  Waitr::Wait.until { browser.body.text.include?("Download & Install Your Apple Push Notification service SSL Certificate") }
+
+  browser.button(alt: 'Done').click()
+  browser.goto(APP_IDS_URL)
 end
 
 def convert_p12_to_pem(app)
   puts "Converting p12 to pem for #{app}"
-  `openssl pkcs12 -nocerts -in #{P12_FILE} -out #{PEM_FILE}`
+  `openssl pkcs12 -nodes -in #{P12_FILE} -out #{CERT_DIR}#{app}.pem`
 end
 
 def export_identity(app)
   puts "Exporting Identity for #{app}..."
-  `security export -k /Users/jprichardson/Library/Keychains/Push_Notifcations -t identities -f pkcs12 -o /tmp/test.p12`
+  `security export -k #{KEYCHAIN_FILE} -t identities -f pkcs12 -P "" -o #{P12_FILE}`
 end
 
 def generate_rsa_key
@@ -150,17 +159,16 @@ def import_rsa_key
 end
 
 def import_apple_cert(app)
+  puts "Error: File Not Found: #{DOWNLOADED_CERT_FILE}" unless File.exists?(DOWNLOADED_CERT_FILE)
   puts "Importing Apple Cert for #{app}..."
   `security import #{DOWNLOADED_CERT_FILE} -k #{KEYCHAIN_FILE}`
 end
 
 class String
-
   def ends_with?(suffix)
     suffix = suffix.to_s
     self[-suffix.length..-1] == suffix
   end
-
 end
 
 main()
