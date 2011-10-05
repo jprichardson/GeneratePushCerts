@@ -23,19 +23,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="app.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="0" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.0">
+            <state line="6" column="0" selection-start="183" selection-end="183" vertical-scroll-proportion="0.17307693">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KeychainManager.rb" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/KeychainManager.rb">
+      <file leaf-file-name="keychain_test.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/keychain_test.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="3" selection-start="26" selection-end="26" vertical-scroll-proportion="0.057692308">
+            <state line="54" column="0" selection-start="1285" selection-end="1285" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="keychain_manager.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/keychain_manager.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="53" column="63" selection-start="1034" selection-end="1034" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -77,6 +86,10 @@
         <option value="$PROJECT_DIR$/config.example.yml" />
         <option value="$PROJECT_DIR$/main.rb" />
         <option value="$PROJECT_DIR$/src/KeychainManager.rb" />
+        <option value="$PROJECT_DIR$/KeychainManager.rb" />
+        <option value="$PROJECT_DIR$/keychain_test.rb" />
+        <option value="$PROJECT_DIR$/keychain_manager.rb" />
+        <option value="$PROJECT_DIR$/app.rb" />
       </list>
     </option>
   </component>
@@ -317,14 +330,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-12" y="22" width="1440" height="814" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23375706" sideWeight="0.76038784" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23375706" sideWeight="0.76038784" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23961219" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32827586" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -380,11 +393,11 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/app.rb</url>
-          <line>120</line>
+          <line>121</line>
         </line-breakpoint>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/app.rb</url>
-          <line>124</line>
+          <line>125</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -410,13 +423,6 @@
         <state line="34" column="0" selection-start="692" selection-end="692" vertical-scroll-proportion="0.02183406" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="50" selection-start="155" selection-end="203" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config.example.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="50" selection-start="213" selection-end="213" vertical-scroll-proportion="0.0">
@@ -424,16 +430,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.rb">
+    <entry file="file://$PROJECT_DIR$/config.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="0" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.0">
+        <state line="6" column="50" selection-start="155" selection-end="203" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/KeychainManager.rb">
+    <entry file="file://$PROJECT_DIR$/keychain_test.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="3" selection-start="26" selection-end="26" vertical-scroll-proportion="0.057692308">
+        <state line="54" column="0" selection-start="1285" selection-end="1285" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keychain_manager.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="63" selection-start="1034" selection-end="1034" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="0" selection-start="183" selection-end="183" vertical-scroll-proportion="0.17307693">
           <folding />
         </state>
       </provider>

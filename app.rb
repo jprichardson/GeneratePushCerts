@@ -1,5 +1,6 @@
 require 'watir-webdriver'
 require 'fileutils'
+require File.join(File.dirname(__FILE__), 'keychain_manager.rb')
 require 'yaml'
 
 config = YAML::load(File.open(Dir.pwd + '/config.yml'))
