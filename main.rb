@@ -1,5 +1,5 @@
 require 'watir-webdriver'
-#require 'watir-webdriver/extensions/wait'
+require 'fileutils'
 require 'yaml'
 
 config = YAML::load(File.open(Dir.pwd + '/config.yml'))
@@ -7,9 +7,37 @@ config = YAML::load(File.open(Dir.pwd + '/config.yml'))
 USER = config['user']
 PASSWORD = config['password']
 COMPANY = config['company']
+KEYCHAIN = config['keychain']
+DOWNLOAD_DIR = config['download_dir']
+
+#create keychain
+kcf = ''
+keychain_files = `security list-keychains`
+if keychain_files.include?(KEYCHAIN)
+  files = keychain_files.split("\n")
+  files.each do |file|
+    if file.include?(KEYCHAIN)
+      kcf = file
+    end
+  end
+else
+  `security create-keychain -p "" #{KEYCHAIN}`
+  keychain_files = `security list-keychains`
+  files = keychain_files.split("\n")
+  files.each do |file|
+    if file.include?(KEYCHAIN)
+      kcf = file
+    end
+  end
+end
+
 
 RSA_FILE = '/tmp/push_notification.key'
 CERT_REQUEST_FILE = '/tmp/CertificateSigningRequest.certSigningRequest'
+KEYCHAIN_FILE = kcf
+DOWNLOADED_CERT_FILE = "#{DOWNLOAD_DIR}aps_production_identity.cer"
+P12_FILE = '/tmp/out.p12'
+PEM_FILE = '/tmp/out.pem'
 
 def main
   puts("Let's get this party started.")
@@ -44,7 +72,7 @@ def main
           elsif tds[1].text.include?('Configurable for Production')
             puts "Configuring certificate for #{aaid}..."
             tds[4].a.click #'Configure' link
-            configure_cert(browser) #new configure page
+            configure_cert(browser, aaid) #new configure page
             STDIN.gets
           end
         end
@@ -58,9 +86,10 @@ def main
 
 end
 
-def configure_cert(browser)
+def configure_cert(browser, app)
   browser.checkbox(id: 'enablePush').click() #enable configure buttons
   browser.button(id: 'aps-assistant-btn-prod-en').click() #configure button
+
   Watir::Wait.until { browser.body.text.include?('Generate a Certificate Signing Request') }
 
   browser.button(id: 'ext-gen59').click() #on lightbox overlay, click continue
@@ -69,6 +98,38 @@ def configure_cert(browser)
   #browser.form(name: 'certsubmit').submit()
   browser.button(id: 'ext-gen75').click()
 
+  Watir::Wait.until { browser.body.text.include?('Your APNs SSL Certificate has been generated.') }
+
+  browser.button(id: 'ext-gen59').click() #continue
+
+  Watir::Wait.until {browser.body.text.include?('Step 1: Download') }
+
+  File.rm(DOWNLOADED_CERT_FILE) if File.exists?(DOWNLOADED_CERT_FILE)
+
+  browser.button(alt: 'Download').click() #download cert
+
+  puts('Checking for existence of downloaded certificate file...')
+  while !File.exists?(DOWNLOADED_CERT_FILE)
+    sleep 1
+  end
+
+  import_apple_cert(app)
+
+  FileUtils.rm(DOWNLOADED_CERT_FILE)
+
+  export_identity(app)
+  convert_p12_to_pem(app)
+
+end
+
+def convert_p12_to_pem(app)
+  puts "Converting p12 to pem for #{app}"
+  `openssl pkcs12 -nocerts -in #{P12_FILE} -out #{PEM_FILE}`
+end
+
+def export_identity(app)
+  puts "Exporting Identity for #{app}..."
+  `security export -k /Users/jprichardson/Library/Keychains/Push_Notifcations -t identities -f pkcs12 -o /tmp/test.p12`
 end
 
 def generate_rsa_key
@@ -78,8 +139,19 @@ end
 
 def generate_cert_request
   generate_rsa_key
+  import_rsa_key
   puts 'Generating Certificate Request...'
   `openssl req -new -key #{RSA_FILE} -out #{CERT_REQUEST_FILE}  -subj "/#{USER}, CN=#{COMPANY}, C=US"`
+end
+
+def import_rsa_key
+  puts 'Importing RSA key...'
+  `security import #{RSA_FILE} -k #{KEYCHAIN_FILE}`
+end
+
+def import_apple_cert(app)
+  puts "Importing Apple Cert for #{app}..."
+  `security import #{DOWNLOADED_CERT_FILE} -k #{KEYCHAIN_FILE}`
 end
 
 class String
