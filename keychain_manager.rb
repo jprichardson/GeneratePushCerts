@@ -1,3 +1,8 @@
+#Mac OS X Keychain Manager Gem.
+#Copyright: JP Richardson 2011
+#email: jprichardson@gmail.com
+#MIT Licensed
+
 class KeychainManager
   attr_reader :name
 
@@ -26,7 +31,7 @@ class KeychainManager
   end
 
   def export_identities(p12_file)
-    `#{CMD_KC} export -k #{self.file} -t identities -f pkcs12 -P "" -o #{p12_file}`
+    `#{CMD_KC} export -k #{self.file} -t identities -f pkcs12 -P '' -o #{p12_file}`
   end
 
   def file
@@ -51,14 +56,15 @@ class KeychainManager
 ########### CLASS Methods
 
   def self.convert_p12_to_pem(p12_file, pem_file)
-    `#{CMD_SSL} pkcs12 -nodes -in #{p12_file} -out #{pem_file}`
+    #`expect -c "spawn #{CMD_SSL} pkcs12 -nodes -in #{p12_file} -out #{pem_file}; expect -re \\\"Enter Import Password:\\\"; send \\\"\\n\\\"; expect eof"`
+    `#{CMD_SSL} pkcs12 -passin pass: -nodes -in #{p12_file} -out #{pem_file}`
   end
 
   def self.generate_cert_request(email, company, country, rsa_file, cert_file)
     `#{CMD_SSL} req -new -key #{rsa_file} -out #{cert_file}  -subj "/#{email}, CN=#{company}, C=#{country}"`
   end
 
-  def self.generate_rsa_key(rsa_file, keysize)
+  def self.generate_rsa_key(rsa_file, keysize=2048)
     `#{CMD_SSL} genrsa -out #{rsa_file} #{keysize}`
   end
 

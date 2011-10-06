@@ -2,79 +2,10 @@
   <profile version="1.0" is_locked="false">
     <option name="myName" value="Project Default" />
     <option name="myLocal" value="false" />
-    <inspection_tool class="Rails3Deprecated" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="showForOldProjects" value="false" />
+    <inspection_tool class="SpellCheckingInspection" enabled="false" level="TYPO" enabled_by_default="false">
+      <option name="processCode" value="true" />
+      <option name="processLiterals" value="true" />
+      <option name="processComments" value="true" />
     </inspection_tool>
-    <inspection_tool class="RailsControllerCallsModelOnce" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RailsCustomFindAccessedTwice" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RailsFindMethodsShouldnotBeCalledFromView" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RailsI18nInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RailsParamDefResolve" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RailsTooManySharedVariables" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyArgCount" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="RubyArgumentParentheses" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyClassMethodNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*[!?=]?|\[\]=?" />
-      <option name="m_minLength" value="2" />
-      <option name="m_maxLength" value="20" />
-    </inspection_tool>
-    <inspection_tool class="RubyClassModuleNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_A-Za-z][_A-Za-z0-9]*" />
-      <option name="m_minLength" value="3" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyClassVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*" />
-      <option name="m_minLength" value="2" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyConstReAssignment" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="RubyConstant" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyConstantNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[A-Z][_A-Z0-9]*" />
-      <option name="m_minLength" value="3" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyDeadCode" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyDynamicConstAssignment" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="RubyGlobalVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*" />
-      <option name="m_minLength" value="1" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyInstanceMethodNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*[!?=]?" />
-      <option name="m_minLength" value="2" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyInstanceVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*" />
-      <option name="m_minLength" value="2" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyJumpError" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyLocalVariableNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_regex" value="[_a-z][_a-z0-9]*" />
-      <option name="m_minLength" value="1" />
-      <option name="m_maxLength" value="30" />
-    </inspection_tool>
-    <inspection_tool class="RubyParameterNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="m_ignoreBlockParameters" value="true" />
-      <option name="m_ignoreRescueParameters" value="true" />
-      <option name="m_ignoreLambdaParameters" value="true" />
-      <option name="m_regex" value="[_a-z][_a-z0-9]*" />
-      <option name="m_minLength" value="1" />
-      <option name="m_maxLength" value="20" />
-    </inspection_tool>
-    <inspection_tool class="RubyResolve" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="warnImplicitResults" value="false" />
-    </inspection_tool>
-    <inspection_tool class="RubyScope" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyShouldaUnsupportedTestFile" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyUnnecessaryReturn" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyUnnecessarySemicolon" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyUnusedLocalVariable" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RubyWrongHash" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="YARDTagsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>
