@@ -60,8 +60,8 @@ class KeychainManager
     `#{CMD_SSL} pkcs12 -passin pass: -nodes -in #{p12_file} -out #{pem_file}`
   end
 
-  def self.generate_cert_request(email, company, country, rsa_file, cert_file)
-    `#{CMD_SSL} req -new -key #{rsa_file} -out #{cert_file}  -subj "/#{email}, CN=#{company}, C=#{country}"`
+  def self.generate_cert_request(email, country, rsa_file, cert_file)
+    `#{CMD_SSL} req -new -key #{rsa_file} -out #{cert_file}  -subj "/#{email}, CN=CERT_NAME, C=#{country}"`
   end
 
   def self.generate_rsa_key(rsa_file, keysize=2048)

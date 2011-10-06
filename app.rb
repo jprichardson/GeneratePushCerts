@@ -7,7 +7,6 @@ config = YAML::load(File.open(Dir.pwd + '/config.yml'))
 
 USER = config['user']
 PASSWORD = config['password']
-COMPANY = config['company']
 KEYCHAIN = config['keychain']
 DOWNLOAD_DIR = config['download_dir']
 CERT_DIR = config['cert_dir']
@@ -27,7 +26,7 @@ def main
   Dir.mkdir(CERT_DIR) unless Dir.exists?(CERT_DIR)
 
   KeychainManager.generate_rsa_key(RSA_FILE)
-  KeychainManager.generate_cert_request(USER, COMPANY, 'US', RSA_FILE, CERT_REQUEST_FILE)
+  KeychainManager.generate_cert_request(USER, 'US', RSA_FILE, CERT_REQUEST_FILE)
 
   browser = Watir::Browser.new(:chrome)
   browser.goto(APP_IDS_URL)
@@ -78,13 +77,13 @@ def configure_for_prod(browser, app)
 
   kcm = KeychainManager.new(KEYCHAIN)
   kcm.delete if kcm.exists? #start fresh
-  kcm.create; puts "creating new keychain for #{app}"
+  kcm.create; #puts "creating new keychain for #{app}"
 
-  kcm.import_rsa_key(RSA_FILE); puts "importing RSA..."
+  kcm.import_rsa_key(RSA_FILE); #puts "importing RSA..."
 
-  configure_cert(browser, app); puts "time for some browser fun..."
+  configure_cert(browser, app); #puts "time for some browser fun..."
 
-  kcm.import_apple_cert(DOWNLOADED_CERT_FILE); puts "importing Apple cert"
+  kcm.import_apple_cert(DOWNLOADED_CERT_FILE); #puts "importing Apple cert"
   File.delete(DOWNLOADED_CERT_FILE)
   kcm.export_identities(P12_FILE)
   KeychainManager.convert_p12_to_pem(P12_FILE, pem_file); puts "exporting #{pem_file}"
@@ -127,39 +126,6 @@ def configure_cert(browser, app)
 
   browser.button(id: 'ext-gen91').click()
   browser.goto(APP_IDS_URL)
-end
-
-def convert_p12_to_pem(app)
-  puts "Converting p12 to pem for #{app}"
-  `openssl pkcs12 -nodes -in #{P12_FILE} -out #{CERT_DIR}#{app}.pem`
-end
-
-def export_identity(app)
-  puts "Exporting Identity for #{app}..."
-  `security export -k #{KEYCHAIN_FILE} -t identities -f pkcs12 -P "" -o #{P12_FILE}`
-end
-
-def generate_rsa_key
-  puts 'Generating RSA key...'
-  `openssl genrsa -out #{RSA_FILE} 2048`
-end
-
-def generate_cert_request
-  generate_rsa_key
-  import_rsa_key
-  puts 'Generating Certificate Request...'
-  `openssl req -new -key #{RSA_FILE} -out #{CERT_REQUEST_FILE}  -subj "/#{USER}, CN=#{COMPANY}, C=US"`
-end
-
-def import_rsa_key
-  puts 'Importing RSA key...'
-  `security import #{RSA_FILE} -k #{KEYCHAIN_FILE}`
-end
-
-def import_apple_cert(app)
-  puts "Error: File Not Found: #{DOWNLOADED_CERT_FILE}" unless File.exists?(DOWNLOADED_CERT_FILE)
-  puts "Importing Apple Cert for #{app}..."
-  `security import #{DOWNLOADED_CERT_FILE} -k #{KEYCHAIN_FILE}`
 end
 
 class String

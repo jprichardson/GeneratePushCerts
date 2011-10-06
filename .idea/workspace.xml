@@ -23,10 +23,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="app.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="0" selection-start="3755" selection-end="3755" vertical-scroll-proportion="0.0">
+            <state line="85" column="48" selection-start="2593" selection-end="2593" vertical-scroll-proportion="0.52662724">
               <folding />
             </state>
           </provider>
@@ -41,10 +41,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="keychain_manager.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="keychain_manager.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/keychain_manager.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="36" selection-start="1272" selection-end="1272" vertical-scroll-proportion="0.34122288">
+            <state line="63" column="91" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -53,7 +53,7 @@
       <file leaf-file-name="config.example.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.example.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="50" selection-start="213" selection-end="213" vertical-scroll-proportion="0.0">
+            <state line="2" column="26" selection-start="62" selection-end="62" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -62,7 +62,7 @@
       <file leaf-file-name="config.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="50" selection-start="155" selection-end="203" vertical-scroll-proportion="0.0">
+            <state line="2" column="21" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -82,14 +82,14 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/config.yml" />
-        <option value="$PROJECT_DIR$/config.example.yml" />
         <option value="$PROJECT_DIR$/main.rb" />
         <option value="$PROJECT_DIR$/src/KeychainManager.rb" />
         <option value="$PROJECT_DIR$/KeychainManager.rb" />
         <option value="$PROJECT_DIR$/keychain_test.rb" />
-        <option value="$PROJECT_DIR$/app.rb" />
         <option value="$PROJECT_DIR$/keychain_manager.rb" />
+        <option value="$PROJECT_DIR$/config.yml" />
+        <option value="$PROJECT_DIR$/config.example.yml" />
+        <option value="$PROJECT_DIR$/app.rb" />
       </list>
     </option>
   </component>
@@ -412,20 +412,6 @@
         <state line="34" column="0" selection-start="692" selection-end="692" vertical-scroll-proportion="0.02183406" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.example.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="50" selection-start="213" selection-end="213" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="50" selection-start="155" selection-end="203" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/keychain_test.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="0" selection-start="1285" selection-end="1285" vertical-scroll-proportion="0.0">
@@ -433,16 +419,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.rb">
+    <entry file="file://$PROJECT_DIR$/config.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="0" selection-start="3755" selection-end="3755" vertical-scroll-proportion="0.0">
+        <state line="2" column="21" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.example.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="26" selection-start="62" selection-end="62" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/keychain_manager.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="36" selection-start="1272" selection-end="1272" vertical-scroll-proportion="0.34122288">
+        <state line="63" column="91" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="48" selection-start="2593" selection-end="2593" vertical-scroll-proportion="0.52662724">
           <folding />
         </state>
       </provider>
