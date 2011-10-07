@@ -1,6 +1,6 @@
 require 'watir-webdriver'
 require 'fileutils'
-require File.join(File.dirname(__FILE__), 'keychain_manager.rb')
+require 'keychain_manager'
 require 'yaml'
 
 config = YAML::load(File.open(Dir.pwd + '/config.yml'))
@@ -17,6 +17,8 @@ CERT_REQUEST_FILE = '/tmp/CertificateSigningRequest.certSigningRequest'
 DOWNLOADED_CERT_FILE = "#{DOWNLOAD_DIR}aps_production_identity.cer"
 P12_FILE = '/tmp/out.p12'
 PEM_FILE = '/tmp/out.pem'
+
+END_WITH = 'FanFB' #You may want to modify this and this line: if aaid.end_with?(END_WITH) (currently right around line 60)
 
 WAIT_TO = 180 #3 mins
 
@@ -49,13 +51,13 @@ def main
     if tds[0].strong.exists?
       name = tds[0].strong
       aaid = ''
-      if name.text.strip.ends_with?('...') #can't see all of the name, must mouse over
+      if name.text.strip.end_with?('...') #can't see all of the name, must mouse over
         aaid = name.attribute_value(:title).strip
       else
         aaid = name.text.strip
       end
 
-      if aaid.ends_with?('FanFB')
+      if aaid.end_with?(END_WITH)
         if tds[1].text.include?('Enabled for Production')
           puts "#{aaid} already enabled. Skipping..."
         elsif tds[1].text.include?('Configurable for Production') #too be safe, generate new Keychain everytime
@@ -126,13 +128,6 @@ def configure_cert(browser, app)
 
   browser.button(id: 'ext-gen91').click()
   browser.goto(APP_IDS_URL)
-end
-
-class String
-  def ends_with?(suffix)
-    suffix = suffix.to_s
-    self[-suffix.length..-1] == suffix
-  end
 end
 
 main()
