@@ -10,6 +10,7 @@ PASSWORD = config['password']
 KEYCHAIN = config['keychain']
 DOWNLOAD_DIR = config['download_dir']
 CERT_DIR = config['cert_dir']
+TEAM = config['team']
 
 APP_IDS_URL = "https://developer.apple.com/ios/manage/bundles/index.action"
 RSA_FILE = '/tmp/push_notification.key'
@@ -41,6 +42,13 @@ def main
     form = browser.form(name:'appleConnectForm')
     form.submit()
     puts("Logged in!")
+  end
+
+  if browser.body.text.include?('Select Your Team')
+      puts("Now let's select your team...")
+      browser.select_list(id: 'teams').select(TEAM)
+      browser.button(id: 'saveTeamSelection_saveTeamSelection_save').click()
+      puts("Team is selected!")
   end
 
   table  = browser.div(:class => 'nt_multi').table #table of Apple App Ids, now called AAID
