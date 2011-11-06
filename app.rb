@@ -1,3 +1,10 @@
+# app.rb
+#
+# Usage: ruby app.rb
+# 
+# Configuring:
+#   config.yml
+
 require 'watir-webdriver'
 require 'fileutils'
 require 'keychain_manager'
@@ -5,23 +12,28 @@ require 'yaml'
 
 config = YAML::load(File.open(Dir.pwd + '/config.yml'))
 
-USER = config['user']
-PASSWORD = config['password']
-KEYCHAIN = config['keychain']
-DOWNLOAD_DIR = config['download_dir']
-CERT_DIR = config['cert_dir']
-TEAM = config['team']
+USER           = config['user']
+PASSWORD       = config['password']
+KEYCHAIN       = config['keychain']
+DOWNLOAD_DIR   = config['download_dir']
+CERT_DIR       = config['cert_dir']
+TEAM           = config['team']
+REFRESH_CERTS  = config['refresh_certs']
 
-APP_IDS_URL = "https://developer.apple.com/ios/manage/bundles/index.action"
-RSA_FILE = '/tmp/push_notification.key'
-CERT_REQUEST_FILE = '/tmp/CertificateSigningRequest.certSigningRequest'
+APP_IDS_URL          = "https://developer.apple.com/ios/manage/bundles/index.action"
+RSA_FILE             = '/tmp/push_notification.key'
+CERT_REQUEST_FILE    = '/tmp/CertificateSigningRequest.certSigningRequest'
 DOWNLOADED_CERT_FILE = "#{DOWNLOAD_DIR}aps_production_identity.cer"
-P12_FILE = '/tmp/out.p12'
-PEM_FILE = '/tmp/out.pem'
+P12_FILE             = '/tmp/out.p12'
+PEM_FILE             = '/tmp/out.pem'
 
 END_WITH = 'FanFB' #You may want to modify this and this line: if aaid.end_with?(END_WITH) (currently right around line 60)
 
 WAIT_TO = 180 #3 mins
+
+# Internal constants
+
+APP_TABLE_CONFIG_COL = 5
 
 def main
   puts("Let's get this party started.")
@@ -67,10 +79,16 @@ def main
 
       if aaid.end_with?(END_WITH)
         if tds[1].text.include?('Enabled for Production')
-          puts "#{aaid} already enabled. Skipping..."
+          if REFRESH_CERTS
+            puts "Rebuilding push ssl cert for #{aaid}..."
+            tds[APP_TABLE_CONFIG_COL].a.click #'Configure' link
+            renew_for_prod(browser, aaid) #new configure page
+          else
+            puts "#{aaid} already enabled. Skipping..."
+          end
         elsif tds[1].text.include?('Configurable for Production') #too be safe, generate new Keychain everytime
           puts "Configuring certificate for #{aaid}..."
-          tds[4].a.click #'Configure' link
+          tds[APP_TABLE_CONFIG_COL].a.click #'Configure' link
           configure_for_prod(browser, aaid) #new configure page
         end
       end
@@ -82,29 +100,46 @@ def main
 
 end
 
-def configure_for_prod(browser, app)
-  pem_file = CERT_DIR + app + '.pem'
+def pem_file(app)
+  File.join(CERT_DIR, app + '.pem')
+end
 
-  kcm = KeychainManager.new(KEYCHAIN)
-  kcm.delete if kcm.exists? #start fresh
-  kcm.create; #puts "creating new keychain for #{app}"
-
-  kcm.import_rsa_key(RSA_FILE); #puts "importing RSA..."
-
-  configure_cert(browser, app); #puts "time for some browser fun..."
-
-  kcm.import_apple_cert(DOWNLOADED_CERT_FILE); #puts "importing Apple cert"
-  File.delete(DOWNLOADED_CERT_FILE)
-  kcm.export_identities(P12_FILE)
-  KeychainManager.convert_p12_to_pem(P12_FILE, pem_file); puts "exporting #{pem_file}"
-
+def with_keychain(app, &block)
+  kcm = load_keychain_for_app(app)
+  yield kcm
   kcm.delete
 end
 
-def configure_cert(browser, app)
+def configure_and_gen_pem(browser, app, &block)
+  with_keychain(app) do |kcm|
+    configure_cert(browser, app); #puts "time for some browser fun..."
+    import_push_ssl_cert(kcm)
+    @pem_file = pem_file(app)
+    KeychainManager.convert_p12_to_pem(P12_FILE, @pem_file); puts "exporting #{@pem_file}"
+  end
+end
+
+def configure_for_prod(browser, app)
   browser.checkbox(id: 'enablePush').click() #enable configure buttons
   browser.button(id: 'aps-assistant-btn-prod-en').click() #configure button
+  configure_and_gen_pem(browser, app)
+end
 
+# renew_for_prod
+# 
+# Renews existing ssl prod cert
+
+def renew_for_prod(browser, app)
+  # 'Generate a new Production Push SSL Certificate before your current one expires' button
+  browser.button(id: 'aps-assistant-btn-ov-prod-en').click
+  configure_and_gen_pem(browser, app)
+end
+
+# configure_cert
+#
+# Enables push
+
+def configure_cert(browser, app)
   Watir::Wait.until { browser.body.text.include?('Generate a Certificate Signing Request') }
 
   browser.button(id: 'ext-gen59').click() #on lightbox overlay, click continue
@@ -136,6 +171,39 @@ def configure_cert(browser, app)
 
   browser.button(id: 'ext-gen91').click()
   browser.goto(APP_IDS_URL)
+end
+
+# download_cert
+#
+# downloads cert
+
+def download_cert(browser, app)
+  File.delete(DOWNLOADED_CERT_FILE) if File.exists?(DOWNLOADED_CERT_FILE)
+
+  #browser.button(src: /button_download/).click() #download cert
+  browser.link(:id, "form_logginMemberCert_").click
+
+  puts('Checking for existence of downloaded certificate file...')
+  while !File.exists?(DOWNLOADED_CERT_FILE)
+    sleep 1
+  end
+  FileUtils.mv DOWNLOADED_CERT_FILE, File.join(DOWNLOAD_DIR, "#{app}.cer")
+  
+  browser.goto(APP_IDS_URL)
+end
+
+def load_keychain_for_app(app)
+  KeychainManager.new(KEYCHAIN).tap do |kcm|
+    kcm.delete if kcm.exists? #start fresh
+    kcm.create; #puts "creating new keychain for #{app}"
+    kcm.import_rsa_key(RSA_FILE); #puts "importing RSA..."
+  end
+end
+
+def import_push_ssl_cert(kcm)
+  kcm.import_apple_cert(DOWNLOADED_CERT_FILE); puts "importing Apple cert"
+  File.delete(DOWNLOADED_CERT_FILE)
+  kcm.export_identities(P12_FILE)
 end
 
 main()
